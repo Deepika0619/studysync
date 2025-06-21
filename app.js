@@ -24,6 +24,12 @@ app.use(session({
   saveUninitialized: true,
 }));
 
+// Make session available in all EJS views
+app.use((req, res, next) => {
+  res.locals.session = req.session;
+  next();
+});
+
 // View Engine Setup
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
@@ -40,8 +46,9 @@ app.use('/', taskRoutes);
 app.get('/', (req, res) => {
   if (req.session.userId) {
     return res.redirect('/dashboard');
+  } else {
+    return res.redirect('/login');
   }
-  res.redirect('/login');
 });
 
 // Start the server
