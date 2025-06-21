@@ -13,18 +13,16 @@ router.post('/signup', async (req, res) => {
   const { name, email, password } = req.body;
 
   try {
-    // Check if email already exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.render('signup', { title: 'Sign Up', error: 'Email already registered!' });
     }
 
-    // Create new user
     const user = new User({ name, email, password });
     await user.save();
 
-    // Store user ID in session
     req.session.userId = user._id;
+    req.flash('success', 'Signup successful!'); 
     res.redirect('/dashboard');
   } catch (err) {
     console.error('Signup error:', err);
@@ -44,27 +42,24 @@ router.post('/login', async (req, res) => {
   try {
     const user = await User.findOne({ email });
     if (!user) {
-      return res.render('login', { title: 'Login', error: 'Invalid email or password' });
+      req.flash('error', 'Invalid email or password'); // ✅ inside route
+      return res.redirect('/login');
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      return res.render('login', { title: 'Login', error: 'Invalid email or password' });
+      req.flash('error', 'Invalid email or password'); // ✅ inside route
+      return res.redirect('/login');
     }
 
     req.session.userId = user._id;
+    req.flash('success', 'Login successful!');
     res.redirect('/dashboard');
   } catch (err) {
     console.error('Login error:', err);
     res.render('login', { title: 'Login', error: 'Something went wrong. Please try again.' });
   }
 });
-
-req.flash('success', 'Signup successful!');
-res.redirect('/dashboard');
-
-req.flash('error', 'Invalid email or password');
-res.redirect('/login');
 
 // GET: Logout
 router.get('/logout', (req, res) => {
