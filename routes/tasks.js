@@ -11,18 +11,31 @@ router.get('/dashboard', async (req, res) => {
 
 // POST: Add new task
 router.post('/tasks', async (req, res) => {
-  const { title } = req.body;
-  await Task.create({ title, userId: req.session.userId });
-  res.redirect('/dashboard');
-});
+  try {
+    const { title } = req.body;
+    await Task.create({ title, userId: req.session.userId });
 
-req.flash('success', 'Task added!');
-res.redirect('/dashboard');
+    // ✅ Flash message inside route
+    req.flash('success', 'Task added!');
+    res.redirect('/dashboard');
+  } catch (err) {
+    console.error('Error adding task:', err);
+    req.flash('error', 'Could not add task');
+    res.redirect('/dashboard');
+  }
+});
 
 // POST: Delete task
 router.post('/tasks/delete/:id', async (req, res) => {
-  await Task.findByIdAndDelete(req.params.id);
-  res.redirect('/dashboard');
+  try {
+    await Task.findByIdAndDelete(req.params.id);
+    req.flash('success', 'Task deleted!');
+    res.redirect('/dashboard');
+  } catch (err) {
+    console.error('Error deleting task:', err);
+    req.flash('error', 'Could not delete task');
+    res.redirect('/dashboard');
+  }
 });
 
 module.exports = router;
