@@ -7,21 +7,35 @@
 <body>
   <div class="container">
     <h2>📋 Your Tasks</h2>
+
+    <% if (success && success.length > 0) { %>
+      <p class="flash success"><%= success %></p>
+    <% } %>
+    <% if (error && error.length > 0) { %>
+      <p class="flash error"><%= error %></p>
+    <% } %>
+
     <form method="POST" action="/tasks">
       <input type="text" name="title" placeholder="Add new task" required>
       <button type="submit">➕ Add Task</button>
     </form>
+
     <ul class="task-list">
-      <% tasks.forEach(task => { %>
-        <li>
-          <form method="POST" action="/tasks/delete/<%= task._id %>">
-            <%= task.title %>
-            <button type="submit">🗑️</button>
-          </form>
-        </li>
-      <% }) %>
+      <% if (tasks.length === 0) { %>
+        <li class="empty">No tasks yet. Add one above! 🌱</li>
+      <% } else { %>
+        <% tasks.forEach(task => { %>
+          <li>
+            <span><%= task.title %></span>
+            <form method="POST" action="/tasks/delete/<%= task._id %>">
+              <button type="submit" title="Delete Task">🗑️</button>
+            </form>
+          </li>
+        <% }) %>
+      <% } %>
     </ul>
-    <a href="/logout">🚪 Logout</a>
+
+    <a href="/logout" class="logout-link">🚪 Logout</a>
   </div>
 </body>
 </html>

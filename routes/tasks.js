@@ -16,6 +16,9 @@ router.post('/tasks', async (req, res) => {
   res.redirect('/dashboard');
 });
 
+req.flash('success', 'Task added!');
+res.redirect('/dashboard');
+
 // POST: Delete task
 router.post('/tasks/delete/:id', async (req, res) => {
   await Task.findByIdAndDelete(req.params.id);

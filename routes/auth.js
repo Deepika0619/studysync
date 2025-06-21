@@ -60,6 +60,12 @@ router.post('/login', async (req, res) => {
   }
 });
 
+req.flash('success', 'Signup successful!');
+res.redirect('/dashboard');
+
+req.flash('error', 'Invalid email or password');
+res.redirect('/login');
+
 // GET: Logout
 router.get('/logout', (req, res) => {
   req.session.destroy(() => {

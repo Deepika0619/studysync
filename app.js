@@ -24,6 +24,16 @@ app.use(session({
   saveUninitialized: true,
 }));
 
+const flash = require('connect-flash');
+app.use(flash());
+
+app.use((req, res, next) => {
+  res.locals.success = req.flash('success');
+  res.locals.error = req.flash('error');
+  next();
+});
+
+
 // Make session available in all EJS views
 app.use((req, res, next) => {
   res.locals.session = req.session;
