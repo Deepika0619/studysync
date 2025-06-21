@@ -5,37 +5,45 @@
   <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
-  <div class="container">
-    <h2>📋 Your Tasks</h2>
+  <div class="page-wrapper">
+    <div class="left-panel">
+      <h2>Welcome Back, Scholar!</h2>
+      <p>Small steps every day lead to big success.</p>
+    </div>
 
-    <% if (success && success.length > 0) { %>
-      <p class="flash success"><%= success %></p>
-    <% } %>
-    <% if (error && error.length > 0) { %>
-      <p class="flash error"><%= error %></p>
-    <% } %>
+    <div class="right-panel">
+      <h2>Your Tasks</h2>
 
-    <form method="POST" action="/tasks">
-      <input type="text" name="title" placeholder="Add new task" required>
-      <button type="submit">➕ Add Task</button>
-    </form>
-
-    <ul class="task-list">
-      <% if (tasks.length === 0) { %>
-        <li class="empty">No tasks yet. Add one above!</li>
-      <% } else { %>
-        <% tasks.forEach(task => { %>
-          <li>
-            <span><%= task.title %></span>
-            <form method="POST" action="/tasks/delete/<%= task._id %>">
-              <button type="submit" title="Delete Task">🗑️</button>
-            </form>
-          </li>
-        <% }) %>
+      <% if (success && success.length > 0) { %>
+        <p class="flash success"><%= success %></p>
       <% } %>
-    </ul>
+      <% if (error && error.length > 0) { %>
+        <p class="flash error"><%= error %></p>
+      <% } %>
 
-    <a href="/logout" class="logout-link">🚪 Logout</a>
+      <form method="POST" action="/tasks">
+        <label for="title">New Task</label>
+        <input type="text" id="title" name="title" placeholder="Add new task" required>
+        <button type="submit">➕ Add Task</button>
+      </form>
+
+      <ul class="task-list">
+        <% if (tasks.length === 0) { %>
+          <li class="empty">No tasks yet. Add one above!</li>
+        <% } else { %>
+          <% tasks.forEach(task => { %>
+            <li>
+              <span><%= task.title %></span>
+              <form method="POST" action="/tasks/delete/<%= task._id %>">
+                <button type="submit" title="Delete Task">🗑️</button>
+              </form>
+            </li>
+          <% }) %>
+        <% } %>
+      </ul>
+
+      <p class="auth-box"><a href="/logout">Logout</a></p>
+    </div>
   </div>
 </body>
 </html>

@@ -19,22 +19,23 @@
     }
 
     header {
-      background: #1e90ff;
+      background: #2A2E3D;
       color: white;
-      padding: 1rem 2rem;
       box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      margin-top: 15px;
+      justify-content: left;
     }
 
     nav {
       display: flex;
-      justify-content: space-between;
+      justify-content: left;
       align-items: center;
       max-width: 1200px;
       margin: 0 auto;
     }
 
     nav h1 {
-      margin: 0;
+      margin-bottom: 40px;
       font-size: 1.8rem;
     }
 
@@ -64,7 +65,7 @@
     }
 
     footer {
-      background: #f1f1f1;
+      background: #2A2E3D;
       text-align: center;
       padding: 1rem;
       font-size: 0.9rem;
@@ -79,16 +80,7 @@
 <body>
   <header>
     <nav>
-      <h1>📘 StudySync</h1>
-      <ul>
-        <% if (session && session.userId) { %>
-          <li><a href="/dashboard">Dashboard</a></li>
-          <li><a href="/logout">Logout</a></li>
-        <% } else { %>
-          <li><a href="/signup">Sign Up</a></li>
-          <li><a href="/login">Login</a></li>
-        <% } %>
-      </ul>
+      <h1>StudySync</h1>
     </nav>
   </header>
 
