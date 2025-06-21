@@ -15,7 +15,6 @@ router.post('/tasks', async (req, res) => {
     const { title } = req.body;
     await Task.create({ title, userId: req.session.userId });
 
-    // ✅ Flash message inside route
     req.flash('success', 'Task added!');
     res.redirect('/dashboard');
   } catch (err) {
