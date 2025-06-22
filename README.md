@@ -32,29 +32,31 @@ This project was built as a Capstone Project using **Node.js**, **Express.js**, 
 git clone https://github.com/yourusername/studysync.git
 cd studysync
 
-2. **Install dependencies**
+2. **Install dependencies**  
+```bash
 npm install
 
-3. **Create a .env file in the root directory and add the following:**
 
+3. **Create a `.env` file** in the root directory and add the following:
+```env
 PORT=3000
 MONGODB_URI=your_mongodb_connection_string
 SESSION_SECRET=your_secret_key
 
-4. **Start the server**
-
+4. **Start the server**  
+```bash
 npm start
 
-5. **Open your browser and go to**
+5. **Open your browser and go to:**  
 
 http://localhost:3000
 
-6. 📸 Screenshots
-(Optional: Add screenshots to help visualize your project)
+6. 🖼️ **Screenshots**  
+_(Optional: Add screenshots to help visualize your project)_
 
-![Login Page](screenshots/login.png)
+![Login Page](screenshots/login.png)  
 ![Dashboard](screenshots/dashboard.png)
-![To-Do List](screenshots/todo.png)
+
 
 📹 Project Demo Video
 🎥 Watch the full walkthrough:
