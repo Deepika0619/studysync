@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title><%= typeof title !== 'undefined' ? title : 'StudySync' %></title>
+  <title><%= noTitle ? '' : (title || 'StudySync') %></title>
 
   <link rel="stylesheet" href="/styles.css" />
   <style>
@@ -58,6 +58,17 @@
   <main>
     <%- body %>
   </main>
+
+  <% if (!noLeftPanel) { %>
+  <div class="left-panel">
+    <button class="nav-toggle" onclick="toggleNav()">☰</button>
+    <div class="left-panel-content">
+      <h2>Welcome Back, <%= user?.name || '' %>!</h2>
+      <p>Small steps every day lead to big success.</p>
+    </div>
+  </div>
+<% } %>
+
   
   <% if (!noFooter) { %>
     <footer>

@@ -30,9 +30,12 @@ app.use((req, res, next) => {
   res.locals.success = req.flash('success');
   res.locals.error = req.flash('error');
   res.locals.session = req.session;
-  res.locals.noFooter = false; 
+  res.locals.noFooter = false;      
+  res.locals.noTitle = false;       
+  res.locals.noLeftPanel = false;  
   next();
 });
+
 
 
 // View Engine
