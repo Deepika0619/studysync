@@ -59,17 +59,16 @@
     <%- body %>
   </main>
 
-  <% if (!noLeftPanel) { %>
+  <% if (!noLeftPanel && typeof user !== 'undefined') { %>
   <div class="left-panel">
     <button class="nav-toggle" onclick="toggleNav()">☰</button>
     <div class="left-panel-content">
-      <h2>Welcome Back, <%= user?.name || '' %>!</h2>
+      <h2>Welcome Back, <%= user.name %>!</h2>
       <p>Small steps every day lead to big success.</p>
     </div>
   </div>
-<% } %>
+  <% } %>
 
-  
   <% if (!noFooter) { %>
     <footer>
       <p>© 2025 <strong>StudySync</strong> — Made by Deepika Annapaneni</p>
