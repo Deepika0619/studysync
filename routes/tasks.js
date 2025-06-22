@@ -1,42 +1,51 @@
+// routes/tasks.js
 const express = require('express');
 const router = express.Router();
 const Task = require('../models/Task');
-const User = require('../models/User'); // Import User model if not already
+const User = require('../models/User');
 
-// GET: Dashboard page
+// GET: Dashboard
 router.get('/dashboard', async (req, res) => {
   if (!req.session.userId) return res.redirect('/login');
+  let user = req.session.user;
+  if (!user) {
+    const userFromDB = await User.findById(req.session.userId);
+    req.session.user = {
+      _id: userFromDB._id,
+      name: userFromDB.name,
+      email: userFromDB.email
+    };
+    user = req.session.user;
+  }
+  res.render('dashboard', {
+    title: 'Dashboard',
+    user,
+    success: req.flash('success'),
+    error: req.flash('error')
+  });
+});
 
+// GET: My Tasks (AJAX)
+router.get('/mytasks', async (req, res) => {
+  if (!req.session.userId) return res.status(401).send('Unauthorized');
   try {
-    const user = req.session.user;
-
-    // Safety check if session doesn't have user
-    if (!user) {
-      const userFromDB = await User.findById(req.session.userId);
-      req.session.user = {
-        _id: userFromDB._id,
-        name: userFromDB.name,
-        email: userFromDB.email
-      };
-    }
-
-    res.render('dashboard', {
-      title: 'Dashboard',
-      user: req.session.user,
-      success: req.flash('success'),
-      error: req.flash('error')
-    });
+    const tasks = await Task.find({ userId: req.session.userId });
+    res.render('partials/actions', { tasks });
   } catch (err) {
-    console.error('Error loading dashboard:', err);
-    req.flash('error', 'Error loading dashboard.');
-    res.redirect('/login');
+    console.error('Error loading tasks:', err);
+    res.status(500).send('Could not load tasks');
   }
 });
 
-// GET: My Tasks page
+// GET: Account Info (AJAX)
+router.get('/account', (req, res) => {
+  if (!req.session.user) return res.status(401).send('Unauthorized');
+  res.render('partials/accounts', { user: req.session.user });
+});
+
+// GET: Tasks Page (full)
 router.get('/tasks', async (req, res) => {
   if (!req.session.userId) return res.redirect('/login');
-
   try {
     const tasks = await Task.find({ userId: req.session.userId });
     res.render('tasks', {
@@ -46,18 +55,17 @@ router.get('/tasks', async (req, res) => {
       error: req.flash('error')
     });
   } catch (err) {
-    console.error('Error loading tasks:', err);
+    console.error('Error loading tasks page:', err);
     req.flash('error', 'Unable to load tasks.');
     res.redirect('/dashboard');
   }
 });
 
-// POST: Add new task
+// POST: Add Task
 router.post('/tasks', async (req, res) => {
   try {
     const { title } = req.body;
     await Task.create({ title, userId: req.session.userId });
-
     req.flash('success', 'Task added!');
     res.redirect('/dashboard');
   } catch (err) {
@@ -67,7 +75,7 @@ router.post('/tasks', async (req, res) => {
   }
 });
 
-// POST: Delete a task
+// POST: Delete Task
 router.post('/tasks/delete/:id', async (req, res) => {
   try {
     await Task.findByIdAndDelete(req.params.id);

@@ -1,3 +1,4 @@
+// routes/auth.js
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
@@ -11,7 +12,6 @@ router.get('/signup', (req, res) => {
 // POST: Handle Signup
 router.post('/signup', async (req, res) => {
   const { name, email, password } = req.body;
-
   try {
     const existingUser = await User.findOne({ email });
     if (existingUser) {
@@ -20,15 +20,12 @@ router.post('/signup', async (req, res) => {
 
     const user = new User({ name, email, password });
     await user.save();
-
-    // ✅ Store full user info in session
     req.session.userId = user._id;
     req.session.user = {
       _id: user._id,
       name: user.name,
       email: user.email
     };
-
     req.flash('success', 'Signup successful!');
     res.redirect('/dashboard');
   } catch (err) {
@@ -45,28 +42,23 @@ router.get('/login', (req, res) => {
 // POST: Handle Login
 router.post('/login', async (req, res) => {
   const { email, password } = req.body;
-
   try {
     const user = await User.findOne({ email });
     if (!user) {
       req.flash('error', 'Invalid email or password');
       return res.redirect('/login');
     }
-
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       req.flash('error', 'Invalid email or password');
       return res.redirect('/login');
     }
-
-    // ✅ Store full user info in session
     req.session.userId = user._id;
     req.session.user = {
       _id: user._id,
       name: user.name,
       email: user.email
     };
-
     req.flash('success', 'Login successful!');
     res.redirect('/dashboard');
   } catch (err) {

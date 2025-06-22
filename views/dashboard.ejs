@@ -1,3 +1,4 @@
+<!-- views/dashboard.ejs -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,18 +7,14 @@
   <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
-  <!-- Slide Sidebar -->
   <nav id="sideNav" class="side-nav">
-    <div class="side-header">
-      Hello, <%= user.name %>
-    </div>
-    <a href="#/actions" onclick="showTasks()">My Tasks</a>
-    <a href="#/accounts" onclick="showAccount()">Account</a>
+    <div class="side-header">Hello, <%= user.name %></div>
+    <a href="#" onclick="showTasks(event)">My Tasks</a>
+    <a href="#" onclick="showAccount(event)">Account</a>
     <a href="/logout">Logout</a>
   </nav>
 
   <div class="page-wrapper">
-    <!-- Left Panel -->
     <div class="left-panel">
       <button class="nav-toggle" onclick="toggleNav()">☰</button>
       <div class="left-panel-content">
@@ -26,17 +23,14 @@
       </div>
     </div>
 
-    <!-- Right Panel -->
     <div class="right-panel" id="mainContent">
       <h2>Add New Task</h2>
-
       <% if (success && success.length > 0) { %>
         <p class="flash success"><%= success %></p>
       <% } %>
       <% if (error && error.length > 0) { %>
         <p class="flash error"><%= error %></p>
       <% } %>
-
       <form method="POST" action="/tasks">
         <label for="title">New Task</label>
         <input type="text" id="title" name="title" placeholder="Add new task" required>
@@ -45,14 +39,13 @@
     </div>
   </div>
 
-  <!-- JavaScript -->
   <script>
     function toggleNav() {
-      const nav = document.getElementById('sideNav');
-      nav.classList.toggle('visible');
+      document.getElementById('sideNav').classList.toggle('visible');
     }
 
-    function showTasks() {
+    function showTasks(event) {
+      event.preventDefault();
       fetch('/mytasks')
         .then(res => res.text())
         .then(html => {
@@ -61,7 +54,8 @@
         });
     }
 
-    function showAccount() {
+    function showAccount(event) {
+      event.preventDefault();
       fetch('/account')
         .then(res => res.text())
         .then(html => {
@@ -70,7 +64,11 @@
         });
     }
 
-    document.addEventListener('click', function (e) {
+    function reloadDashboard() {
+      window.location.href = '/dashboard';
+    }
+
+    document.addEventListener('click', function(e) {
       const nav = document.getElementById('sideNav');
       const toggle = document.querySelector('.nav-toggle');
       if (!nav.contains(e.target) && !toggle.contains(e.target)) {
@@ -79,14 +77,8 @@
     });
 
     setTimeout(() => {
-      const flashMessages = document.querySelectorAll('.flash');
-      flashMessages.forEach(msg => msg.style.display = 'none');
+      document.querySelectorAll('.flash').forEach(msg => msg.style.display = 'none');
     }, 3000);
-
-    function reloadDashboard() {
-      location.reload(); // reloads full dashboard with task form
-      }
-
   </script>
 </body>
 </html>
