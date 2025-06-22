@@ -1,0 +1,20 @@
+<h2>My Tasks</h2>
+
+<% if (tasks.length === 0) { %>
+  <p>No tasks yet. Start by adding one!</p>
+<% } else { %>
+  <ul style="list-style: none; padding: 0;">
+    <% tasks.forEach(task => { %>
+      <li style="margin-bottom: 10px; background: #3a3d4a; padding: 12px 16px; border-radius: 12px;">
+        <%= task.title %>
+        <form action="/tasks/delete/<%= task._id %>" method="POST" style="display: inline;">
+          <button type="submit" style="float: right; background-color: #ff4d4d; border: none; padding: 8px 12px; border-radius: 8px; cursor: pointer;">🗑</button>
+        </form>
+      </li>
+    <% }); %>
+  </ul>
+<% } %>
+
+<!-- Back to Dashboard -->
+<br>
+<button onclick="reloadDashboard()" style="margin-top: 20px;">🔙 Back to Dashboard</button>

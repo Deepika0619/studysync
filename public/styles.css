@@ -45,6 +45,7 @@ body {
   align-items: center;
   text-align: left;
   color: var(--light-text);
+  position: relative;
 }
 
 .left-panel h2 {
@@ -152,7 +153,59 @@ button:hover {
   .page-wrapper {
     flex-direction: column;
   }
-  .left-panel, .right-panel {
+  .left-panel,
+  .right-panel {
     padding: 30px;
   }
+}
+
+/* Amazon-style Slide Sidebar */
+.side-nav {
+  position: fixed;
+  top: 0;
+  left: -260px;
+  width: 260px;
+  height: 100%;
+  background-color: var(--panel-left);
+  z-index: 999;
+  padding: 30px 20px;
+  box-shadow: 4px 0 12px rgba(0, 0, 0, 0.3);
+  transition: left 0.3s ease-in-out;
+}
+
+.side-nav.visible {
+  left: 0;
+}
+
+.side-nav .side-header {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 30px;
+  color: var(--light-text);
+}
+
+.side-nav a {
+  display: block;
+  padding: 12px 0;
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--light-text);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.side-nav a:hover {
+  color: var(--accent-blue);
+}
+
+.nav-toggle {
+  position: absolute;
+  top: 25px;
+  left: 25px;
+  font-size: 28px;
+  background: none;
+  border: none;
+  color: var(--light-text);
+  cursor: pointer;
+  z-index: 1000;
 }
