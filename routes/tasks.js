@@ -30,7 +30,7 @@ router.get('/mytasks', async (req, res) => {
   if (!req.session.userId) return res.status(401).send('Unauthorized');
   try {
     const tasks = await Task.find({ userId: req.session.userId });
-    res.render('actions', { tasks, noFooter: true, noTitle: true, noLeftPanel: true });
+    res.render('actions', { tasks, noFooter: true, noTitle: true, noLeftPanel: true , layout: false });
   } catch (err) {
     console.error('Error loading tasks:', err);
     res.status(500).send('Could not load tasks');
@@ -40,7 +40,7 @@ router.get('/mytasks', async (req, res) => {
 // GET: Account Info (AJAX)
 router.get('/account', (req, res) => {
   if (!req.session.user) return res.status(401).send('Unauthorized');
-  res.render('accounts', { user: req.session.user, noFooter: true, noTitle: true, noLeftPanel: true });
+  res.render('accounts', { user: req.session.user, noFooter: true, noTitle: true, noLeftPanel: true, layout: false });
 });
 
 // GET: Tasks Page (full)
