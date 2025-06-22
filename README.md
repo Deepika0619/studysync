@@ -12,9 +12,6 @@ This project was built as a Capstone Project using **Node.js**, **Express.js**, 
 - 📧 Email duplication prevention
 - 🧾 Personalized dashboard
 - ✅ Task/to-do list (CRUD)
-- 💬 Group chat with Socket.IO
-- 📂 Notes upload/download
-- ⏰ Reminders using node-schedule
 - 🎨 Clean and student-friendly UI
 
 
