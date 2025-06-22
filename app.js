@@ -30,8 +30,10 @@ app.use((req, res, next) => {
   res.locals.success = req.flash('success');
   res.locals.error = req.flash('error');
   res.locals.session = req.session;
+  res.locals.noFooter = false; 
   next();
 });
+
 
 // View Engine
 app.set('view engine', 'ejs');
