@@ -1,10 +1,9 @@
-// routes/auth.js
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
 const User = require('../models/User');
 
-// GET: Signup page
+// GET: Signup Page
 router.get('/signup', (req, res) => {
   res.render('signup', { title: 'Sign Up', error: null });
 });
@@ -12,29 +11,45 @@ router.get('/signup', (req, res) => {
 // POST: Handle Signup
 router.post('/signup', async (req, res) => {
   const { name, email, password } = req.body;
+
   try {
     const existingUser = await User.findOne({ email });
+
     if (existingUser) {
-      return res.render('signup', { title: 'Sign Up', error: 'Email already registered!' });
+      return res.render('signup', {
+        title: 'Sign Up',
+        error: 'Email already registered!'
+      });
     }
 
-    const user = new User({ name, email, password });
+    const hashedPassword = await bcrypt.hash(password, 12);
+    const user = new User({
+      name,
+      email,
+      password: hashedPassword
+    });
+
     await user.save();
+
     req.session.userId = user._id;
     req.session.user = {
       _id: user._id,
       name: user.name,
       email: user.email
     };
+
     req.flash('success', 'Signup successful!');
     res.redirect('/dashboard');
   } catch (err) {
     console.error('Signup error:', err);
-    res.render('signup', { title: 'Sign Up', error: 'Something went wrong. Please try again.' });
+    res.render('signup', {
+      title: 'Sign Up',
+      error: 'Something went wrong. Please try again.'
+    });
   }
 });
 
-// GET: Login page
+// GET: Login Page
 router.get('/login', (req, res) => {
   res.render('login', { title: 'Login', error: null });
 });
@@ -42,28 +57,36 @@ router.get('/login', (req, res) => {
 // POST: Handle Login
 router.post('/login', async (req, res) => {
   const { email, password } = req.body;
+
   try {
     const user = await User.findOne({ email });
+
     if (!user) {
       req.flash('error', 'Invalid email or password');
       return res.redirect('/login');
     }
+
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       req.flash('error', 'Invalid email or password');
       return res.redirect('/login');
     }
+
     req.session.userId = user._id;
     req.session.user = {
       _id: user._id,
       name: user.name,
       email: user.email
     };
+
     req.flash('success', 'Login successful!');
     res.redirect('/dashboard');
   } catch (err) {
     console.error('Login error:', err);
-    res.render('login', { title: 'Login', error: 'Something went wrong. Please try again.' });
+    res.render('login', {
+      title: 'Login',
+      error: 'Something went wrong. Please try again.'
+    });
   }
 });
 
