@@ -1,19 +1,40 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8">
   <title>Dashboard – StudySync</title>
   <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
   <div class="page-wrapper">
+    
+    <!-- Left Panel -->
     <div class="left-panel">
-      <h2>Welcome Back, Scholar!</h2>
-      <p>Small steps every day lead to big success.</p>
+      <!-- Hamburger Button -->
+      <button class="nav-toggle" onclick="toggleNav()">☰</button>
+
+      <!-- Sidebar Navigation -->
+      <nav id="sideNav" class="side-nav">
+        <div class="side-header">
+          <p>Hello, Scholar</p>
+        </div>
+        <a href="#taskSection">My Tasks</a>
+        <a href="#">Account</a>
+        <a href="/logout">Logout</a>
+      </nav>
+
+      <!-- Welcome Text -->
+      <div class="left-panel-content">
+        <h2>Welcome Back, Scholar!</h2>
+        <p>Small steps every day lead to big success.</p>
+      </div>
     </div>
 
+    <!-- Right Panel -->
     <div class="right-panel">
-      <h2>Your Tasks</h2>
+      <h2>Add New Task</h2>
 
+      <!-- Flash Messages -->
       <% if (success && success.length > 0) { %>
         <p class="flash success"><%= success %></p>
       <% } %>
@@ -21,29 +42,35 @@
         <p class="flash error"><%= error %></p>
       <% } %>
 
+      <!-- Task Form -->
       <form method="POST" action="/tasks">
         <label for="title">New Task</label>
         <input type="text" id="title" name="title" placeholder="Add new task" required>
         <button type="submit">➕ Add Task</button>
       </form>
-
-      <ul class="task-list">
-        <% if (tasks.length === 0) { %>
-          <li class="empty">No tasks yet. Add one above!</li>
-        <% } else { %>
-          <% tasks.forEach(task => { %>
-            <li>
-              <span><%= task.title %></span>
-              <form method="POST" action="/tasks/delete/<%= task._id %>">
-                <button type="submit" title="Delete Task">🗑️</button>
-              </form>
-            </li>
-          <% }) %>
-        <% } %>
-      </ul>
-
-      <p class="auth-box"><a href="/logout">Logout</a></p>
     </div>
   </div>
+
+  <!-- JavaScript -->
+  <script>
+    function toggleNav() {
+      const nav = document.getElementById('sideNav');
+      nav.classList.toggle('visible');
+    }
+
+    document.addEventListener('click', function (e) {
+      const nav = document.getElementById('sideNav');
+      const toggle = document.querySelector('.nav-toggle');
+      if (!nav.contains(e.target) && !toggle.contains(e.target)) {
+        nav.classList.remove('visible');
+      }
+    });
+
+    // Auto-hide flash messages
+    setTimeout(() => {
+      const flashMessages = document.querySelectorAll('.flash');
+      flashMessages.forEach(msg => msg.style.display = 'none');
+    }, 3000);
+  </script>
 </body>
 </html>
