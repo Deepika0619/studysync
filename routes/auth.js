@@ -21,8 +21,15 @@ router.post('/signup', async (req, res) => {
     const user = new User({ name, email, password });
     await user.save();
 
+    // ✅ Store full user info in session
     req.session.userId = user._id;
-    req.flash('success', 'Signup successful!'); 
+    req.session.user = {
+      _id: user._id,
+      name: user.name,
+      email: user.email
+    };
+
+    req.flash('success', 'Signup successful!');
     res.redirect('/dashboard');
   } catch (err) {
     console.error('Signup error:', err);
@@ -42,17 +49,24 @@ router.post('/login', async (req, res) => {
   try {
     const user = await User.findOne({ email });
     if (!user) {
-      req.flash('error', 'Invalid email or password'); 
+      req.flash('error', 'Invalid email or password');
       return res.redirect('/login');
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      req.flash('error', 'Invalid email or password'); 
+      req.flash('error', 'Invalid email or password');
       return res.redirect('/login');
     }
 
+    // ✅ Store full user info in session
     req.session.userId = user._id;
+    req.session.user = {
+      _id: user._id,
+      name: user.name,
+      email: user.email
+    };
+
     req.flash('success', 'Login successful!');
     res.redirect('/dashboard');
   } catch (err) {
